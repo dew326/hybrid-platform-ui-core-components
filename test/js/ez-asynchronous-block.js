@@ -55,6 +55,22 @@ describe('ez-asynchronous-block', function() {
         });
     });
 
+    describe('redirection', function () {
+        it('should be redirected after 205 status', function (done) {
+            const response = new Response(null, {'status': 205});
+            const fetch = sinon.stub(window, 'fetch', function () {
+                return Promise.resolve(response);
+            });
+
+            element.addEventListener('ez:navigateTo', function () {
+                assert.isFalse(element.loaded);
+                done();
+            });
+            element.load();
+            fetch.restore();
+        });
+    });
+
     describe('load()', function () {
         beforeEach(function () {
             sinon.spy(window, 'fetch');
