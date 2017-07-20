@@ -55,54 +55,65 @@ describe('ez-asynchronous-block', function() {
         });
     });
 
-    describe('redirection', function () {
-        it('should be redirected after 205 status', function (done) {
-            const response = new Response(null, {'status': 205});
-            const fetch = sinon.stub(window, 'fetch', function () {
-                return Promise.resolve(response);
-            });
-
-            element.addEventListener('ez:navigateTo', function () {
-                assert.isFalse(element.loaded);
-                done();
-            });
-            element.load();
-            fetch.restore();
-        });
-    });
-
     describe('load()', function () {
-        beforeEach(function () {
-            sinon.spy(window, 'fetch');
-        });
-
-        afterEach(function () {
-            fetch.restore();
-        });
-
         it('should request the `url`', function () {
+            sinon.spy(window, 'fetch');
             element.load();
             const headers = fetch.firstCall.args[1].headers;
 
             assert.isTrue(fetch.calledOnce);
             assert.isTrue(fetch.alwaysCalledWith(element.url));
-
             assert.equal(
                 'application/partial-update+html',
                 headers.get('Accept'),
                 'The Accept header should be set to get a partial HTML update'
             );
+            fetch.restore();
+
         });
 
         it('should update the content', function (done) {
+            sinon.spy(window, 'fetch');
             element.addEventListener('ez:asynchronousBlock:updated', function () {
                 assert.isNotNull(element.querySelector('.updated'));
                 done();
             });
             element.load();
+            fetch.restore();
+        });
+
+        describe('redirection', function () {
+            beforeEach(function () {
+                const response = new Response(null, {'status': 205});
+
+                sinon.stub(window, 'fetch', function () {
+                    return Promise.resolve(response);
+                });
+            });
+
+            afterEach(function () {
+                fetch.restore();
+            });
+
+            it('should be redirected after 205 status', function (done) {
+                document.addEventListener('ez:navigateTo', function () {
+                    assert.isTrue(element.loaded);
+                    done();
+                });
+                element.load();
+                assert.isTrue(fetch.calledOnce);
+            });
         });
 
         describe('network error handling', function () {
+            beforeEach(function () {
+                sinon.spy(window, 'fetch');
+            });
+
+            afterEach(function () {
+                fetch.restore();
+            });
+
             function assertError(error, element) {
                 // this should test instanceof Error instead
                 // but in Edge with the fetch polyfill it's not an Error object!?

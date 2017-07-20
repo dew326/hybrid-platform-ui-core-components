@@ -107,7 +107,7 @@
                 .then((response) => {
                     if ( response.status >= 400 ) {
                         throw new Error();
-                    } else if ( response.status == 205 ) {
+                    } else if ( response.status === 205 ) {
                         throw response.headers;
                     }
                     return response;
@@ -120,8 +120,8 @@
                     this._dispatchUpdated();
                 })
                 .catch((param) => {
+                    this.loading = false;
                     if (param instanceof Error) {
-                        this.loading = false;
                         this._dispatchError(param);
                     } else {
                         const event = new CustomEvent('ez:navigateTo', {
@@ -129,6 +129,7 @@
                             bubbles: true,
                         });
 
+                        this.loaded = true;
                         this.dispatchEvent(event);
                     }
                 });
