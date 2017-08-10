@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+        <title>ez-pagination demo</title>
+
+        <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+        <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+        <link rel="import" href="../ez-pagination.html">
+
+        <style>
+            :root {
+                --ez-color-text-base-inverted: #fff;
+                --ez-color-neutral: #757575;
+                --ez-color-secondary: #0f6d95;
+            }
+            .page {
+                text-align: center
+            }
+        </style>
+    </head>
+    <body>
+        <div class="vertical-section-container centered">
+            <h3>Basic ez-pagination demo</h3>
+            <demo-snippet>
+                <template>
+                    <script>
+                    (function () {
+                        'use strict';
+
+                        document.addEventListener('ez:pagination:update', event => {
+                            const pageNumber = parseInt(event.detail.url.split('/').pop(), 10);
+                            const pagesUrls = {
+                                1: '/load/page/1',
+                                13: '/load/page/13'
+                            };
+
+                            if (pageNumber-2 > 1) {pagesUrls[pageNumber-2] = `/load/page/${pageNumber-2}`;}
+                            if (pageNumber-1 > 1) {pagesUrls[pageNumber-1] = `/load/page/${pageNumber-1}`;}
+                            pagesUrls[pageNumber] = `/load/page/${pageNumber}`;
+                            if (pageNumber+1 < 13) {pagesUrls[pageNumber+1] = `/load/page/${pageNumber+1}`;}
+                            if (pageNumber+2 < 13) {pagesUrls[pageNumber+2] = `/load/page/${pageNumber+2}`;}
+
+
+                            document.querySelector('.page').innerHTML = `
+                                <span>Page ${pageNumber} loaded</span>
+                                <ez-pagination
+                                    current-page=${pageNumber}
+                                    pages-urls=${JSON.stringify(pagesUrls)}
+                                ></ez-pagination>
+                            `;
+                        });
+                    })();
+                    </script>
+                    <div class="page">
+                        <span>Page 7 loaded</span>
+                        <ez-pagination
+                            current-page="7"
+                            pages-urls='{"1":"/load/page/1", "5":"/load/page/5", "6":"/load/page/6", "7":"/load/page/7", "8":"/load/page/8", "9":"/load/page/9", "13":"/load/page/13"}'
+                        ></ez-pagination>
+                    </div>
+                </template>
+            </demo-snippet>
+        </div>
+    </body>
+</html>

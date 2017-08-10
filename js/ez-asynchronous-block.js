@@ -85,6 +85,7 @@
                     this.load(target.href);
                 }
             });
+            this.addEventListener('ez:pagination:update', (e) => this.load(e.detail.url));
         }
 
         /**

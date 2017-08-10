@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+        <title>ez-pagination test</title>
+
+        <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+        <script src="../../web-component-tester/browser.js"></script>
+
+        <link rel="import" href="../ez-pagination.html">
+    </head>
+    <body>
+
+        <test-fixture id="BasicTestFixture">
+            <template>
+                <ez-pagination
+                    current-page="7"
+                    pages-urls='{"1":"/url1", "5":"/url5", "6":"/url6", "7":"/url7", "8":"/url8", "9":"/url9", "13":"/url13"}'
+                >
+                </ez-pagination>
+            </template>
+        </test-fixture>
+
+        <script src="js/ez-pagination.js"></script>
+    </body>
+</html>

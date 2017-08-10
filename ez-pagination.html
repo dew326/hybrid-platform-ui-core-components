@@ -1,0 +1,73 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../polymer/lib/elements/dom-if.html">
+
+<dom-module id="ez-pagination">
+    <template>
+        <style>
+            :host {
+                display: flex;
+                justify-content: center;
+                margin-top: 1em;
+            }
+
+            a {
+                text-decoration: none;
+                color: var(--ez-color-neutral);
+                padding: 0 .2em;
+            }
+
+            a.ez-pagination-current-page {
+                color: #000;
+            }
+
+            .button {
+                display: inline-block;
+                line-height: inherit;
+                white-space: nowrap;
+                vertical-align: middle;
+                text-align: center;
+                cursor: pointer;
+                -webkit-user-drag: none;
+                user-select: none;
+                box-sizing: border-box;
+
+                text-decoration: none;
+                padding: 0.5em 1em;
+                border-radius: 4px;
+                color: var(--ez-color-text-base-inverted);
+                background: var(--ez-color-neutral);
+                border: 1px solid var(--ez-color-neutral);
+                font-size: 100%;
+            }
+
+            .button[disabled] {
+                opacity: 0.3;
+            }
+
+            .button-next {
+                background: var(--ez-color-secondary);
+                border: 1px solid var(--ez-color-secondary);
+            }
+
+            .pagination-pages {
+                display: inline-block;
+                padding: .5em;
+                vertical-align: bottom;
+            }
+        </style>
+        <button class="button button-back ez-js-standard-navigation" href$="[[backUrl]]" on-click="_fireUpdateEvent">Back</button>
+        <div class="pagination-pages">
+            <template is="dom-repeat" items="{{urlsToRender}}">
+                <template is="dom-if" if="{{item.isSeparator}}">
+                    <span>...</span>
+                </template>
+                <template is="dom-if" if="{{item.pageNumber}}">
+                    <a class$="{{item.currentClass}} ez-js-standard-navigation" href$="{{item.url}}" on-click="_fireUpdateEvent">{{item.pageNumber}}</a>
+                </template>
+            </template>
+        </div>
+        <button class="button button-next ez-js-standard-navigation" href$="[[nextUrl]]" on-click="_fireUpdateEvent">Next</button>
+    </template>
+    <script src="js/ez-pagination.js"></script>
+</dom-module>
